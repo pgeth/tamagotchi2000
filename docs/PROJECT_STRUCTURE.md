@@ -31,5 +31,6 @@ main
 │   ├── backend-server
 │   ├── build
 │   ├── frontend
-│   └── tests
+│   │── tests
+│   └── pmDocs #Документы ПМа
 ```
