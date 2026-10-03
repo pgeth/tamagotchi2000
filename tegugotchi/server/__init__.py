@@ -1,1 +1,0 @@
-# tegugotchi.server
