@@ -39,7 +39,7 @@ class Pet:
         self.__hunger += value
         self.__hunger = max(0, self.__hunger)
 
-        if self.__hunger >= 5:
+        if self.__hunger > 5:
             self.change_hp(-(1 + self.__hgCounter))
             self.__hgCounter += 1
         else:
