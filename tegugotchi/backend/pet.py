@@ -1,73 +1,72 @@
 class Pet:
-    def __init__(self, name: str, hp: int) -> None:
+    def __init__(self, name: str, hp: int, happiness = 2, hunger = 2, hunger_penalty_count = 0, is_alive = True) -> None:
         if hp <= 0:
-            raise ValueError("Возраст не может быть отрицательным или нулевым!")
+            raise ValueError("Здоровье должно быть больше нуля")
         self.__name : str = name
         self.__hp : int = hp
-        self.__happyness : int = 2
-        self.__hunger : int = 2
+        self.__happiness : int = happiness
+        self.__hunger : int = hunger
 
-        self.__hgCounter : int = 0
-        self.__isAlive : bool = True
+        self.__hunger_penalty_count : int = hunger_penalty_count
+        self.__is_alive : bool = is_alive
 
     def __ensure_alive(self) -> None:
-        if not self.__isAlive:
+        if not self.__is_alive:
             raise ValueError("Питомец неактивен")
 
     def disappeared(self) -> None:
         self.__ensure_alive()
-        self.__isAlive = False
-        print("Питомец ушёл")
+        self.__is_alive = False
 
-    def change_hp(self, value : int) -> None:
+    def __change_hp(self, value : int) -> None:
         if not self.is_alive:
             return
         self.__hp += value
         if self.__hp <= 0:
             self.disappeared()
 
-    def change_happyness(self, value : int) -> None:
+    def __change_happiness(self, value : int) -> None:
         if not self.is_alive:
             return
-        self.__happyness += value
-        if self.__happyness <= 0:
+        self.__happiness += value
+        if self.__happiness <= 0:
             self.disappeared()
 
-    def change_hunger(self, value : int) -> None:
+    def __change_hunger(self, value : int) -> None:
         if not self.is_alive:
             return
         self.__hunger += value
         self.__hunger = max(0, self.__hunger)
 
         if self.__hunger > 5:
-            self.change_hp(-(1 + self.__hgCounter))
-            self.__hgCounter += 1
+            self.__change_hp(-(1 + self.__hunger_penalty_count))
+            self.__hunger_penalty_count += 1
         else:
-            self.__hgCounter = 0
+            self.__hunger_penalty_count = 0
 
     def feed(self) -> None:
         self.__ensure_alive()
-        self.change_hunger(-2)
+        self.__change_hunger(-2)
 
     def pat(self) -> None:
         self.__ensure_alive()
-        self.change_happyness(+1)
-        self.change_hunger(+1)
+        self.__change_happiness(+1)
+        self.__change_hunger(+1)
 
-    def delicious_feed(self) -> None:
+    def treat(self) -> None:
         self.__ensure_alive()
-        self.change_happyness(+2)
-        self.change_hunger(-1)
+        self.__change_happiness(+2)
+        self.__change_hunger(-1)
 
     def walk(self) -> None:
         self.__ensure_alive()
-        self.change_happyness(+1)
-        self.change_hunger(+3)
+        self.__change_happiness(+1)
+        self.__change_hunger(+3)
 
     def ignore(self) -> None:
         self.__ensure_alive()
-        self.change_happyness(-1)
-        self.change_hunger(+1)
+        self.__change_happiness(-1)
+        self.__change_hunger(+1)
 
     @property
     def hp(self) -> int:
@@ -80,9 +79,9 @@ class Pet:
         return self.__name
 
     @property
-    def happyness(self) -> int:
+    def happiness(self) -> int:
         self.__ensure_alive()
-        return self.__happyness
+        return self.__happiness
 
     @property
     def hunger(self) -> int:
@@ -90,5 +89,10 @@ class Pet:
         return self.__hunger
 
     @property
+    def hunger_penalty_count(self) -> int:
+        self.__ensure_alive()
+        return self.__hunger_penalty_count
+
+    @property
     def is_alive(self) -> bool:
-        return self.__isAlive
+        return self.__is_alive
