@@ -1,9 +1,15 @@
 name: PEP8 Checker
-on: [push]
+on: [push, pull_request]
 
-jobs: 
+jobs:
     checker:
         runs-on: ubuntu-22.04
         steps:
-            - name: test
-              run: echo "test completed"
+        - uses: actions/checkout@v4
+        - uses: actions/setup-python@v5
+          with:
+              python-version: '3.14.7'
+        - name: Run Ruff
+          run: |
+            pip install ruff
+            ruff check tests tegugotchi

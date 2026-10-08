@@ -1,0 +1,12 @@
+#!/bin/sh
+
+echo "Run PEP8 check"
+RUFF_OUT=$(ruff check tests tegugotchi)
+
+if [[ "$RUFF_OUT" != "All checks passed!" ]]; then
+    echo "$RUFF_OUT"
+    exit 1
+fi
+
+echo "$RUFF_OUT"
+exit 0
