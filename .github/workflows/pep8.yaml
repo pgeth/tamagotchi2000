@@ -1,0 +1,9 @@
+name: PEP8 Checker
+on: [push]
+
+jobs: 
+    checker:
+        runs-on: ubuntu-22.04
+        steps:
+            - name: test
+              run: echo "test completed"
