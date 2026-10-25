@@ -1,6 +1,4 @@
 """Хранение питомцев в MongoDB."""
-from typing import Optional
-
 from pymongo import ReturnDocument
 from pymongo.database import Database
 
@@ -44,7 +42,7 @@ class PetRepository:
         self._pets.insert_one({"_id": pet_id, **self._to_document(pet)})
         return pet_id
 
-    def get(self, pet_id: int) -> Optional[Pet]:
+    def get(self, pet_id: int) -> Pet | None:
         """Загрузить питомца. Если такого нет, вернёт None."""
         document = self._pets.find_one({"_id": pet_id})
         if document is None:
