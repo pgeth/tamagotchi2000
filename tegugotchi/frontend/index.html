@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tegugotchi 2000</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="tamagotchi-case">
+        <div class="screen-border">
+            <div id="screen" class="screen">
+                <!-- Окно создания питомца -->
+                <div id="creation-window" class="window">
+                    <h2>Новый питомец</h2>
+                    <input type="text" id="pet-name" placeholder="Имя питомца" maxlength="12">
+                    <input type="number" id="pet-hp" placeholder="Здоровье (HP)" min="1" max="100" value="5">
+                    <button id="btn-create">Создать</button>
+                </div>
+
+                <!-- Экран игры -->
+                <div id="game-window" class="window hidden">
+                    <h3 id="display-name">Имя</h3>
+                    <div class="stats">
+                        <p>❤️ HP: <span id="stat-hp">0</span></p>
+                        <p>😊 Счастье: <span id="stat-happiness">0</span></p>
+                        <p>🍖 Голод: <span id="stat-hunger">0</span></p>
+                    </div>
+                    <div class="pet-avatar">🦖</div>
+                    <p id="game-message">Привет! Давай играть!</p>
+                </div>
+
+                <!-- Экран смерти/исчезновения -->
+                <div id="death-window" class="window hidden">
+                    <h2>Питомец исчез... 👻</h2>
+                    <p id="death-reason"></p>
+                    <button id="btn-restart">Начать заново</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопки управления (как на реальном Тамагочи) -->
+        <div class="controls">
+            <button class="action-btn" data-action="feed">🍖 Кормить</button>
+            <button class="action-btn" data-action="pat">👋 Гладить</button>
+            <button class="action-btn" data-action="treat">🍬 Вкусняшка</button>
+            <button class="action-btn" data-action="walk">🌳 Гулять</button>
+            <button class="action-btn" data-action="ignore">💤 Игнорить</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

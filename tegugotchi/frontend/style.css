@@ -1,0 +1,224 @@
+﻿body {
+    background-color: #1e272e;
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    user-select: none;
+}
+
+/* Корпус Тамагочи с неоновым свечением */
+.tamagotchi-case {
+    background: radial-gradient(circle, #3498db, #2c3e50);
+    border-radius: 50% 50% 43% 43% / 40% 40% 55% 55%;
+    padding: 35px;
+    box-shadow: 0 15px 0 #1b4f72, 0 25px 30px rgba(0,0,0,0.6);
+    width: 320px;
+    transition: transform 0.1s ease;
+}
+
+/* Эффект тряски всего корпуса при уроне */
+.shake-case {
+    animation: caseShake 0.4s ease-in-out;
+}
+
+@keyframes caseShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px) rotate(-2deg); }
+    40%, 80% { transform: translateX(8px) rotate(2deg); }
+}
+
+.screen-border {
+    background-color: #2c3e50;
+    padding: 12px;
+    border-radius: 15px;
+    box-shadow: inset 0 5px 15px rgba(0,0,0,0.9);
+    border: 4px solid #34495e;
+}
+
+.screen {
+    background-color: #b8d8be; /* Ретро зелёно-серый пиксельный цвет */
+    height: 230px;
+    border-radius: 8px;
+    padding: 12px;
+    color: #1a2516;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+/* --- АНИМАЦИЯ ОКН (Мягкое появление/исчезновение) --- */
+.window {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.window.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Элементы ввода */
+input {
+    width: 85%;
+    padding: 8px;
+    margin: 6px 0;
+    border: 2px solid #2c3e50;
+    background-color: #cbdccb;
+    font-family: inherit;
+    font-weight: bold;
+    text-align: center;
+}
+
+button {
+    font-family: inherit;
+    padding: 8px 16px;
+    background-color: #2c3e50;
+    color: #b8d8be;
+    border: 2px solid #1a2516;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+}
+button:hover { background-color: #1a2516; }
+
+/* Игровой экран */
+.top-bar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 16px;
+    border-bottom: 2px dashed #1a2516;
+    padding-bottom: 4px;
+}
+
+.stats-grid {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    margin-top: 5px;
+}
+.stat-box {
+    font-weight: bold;
+    font-size: 14px;
+    background: rgba(0,0,0,0.05);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+#game-message {
+    font-size: 12px;
+    margin: 5px 0 0 0;
+    text-align: center;
+    font-style: italic;
+}
+
+/* --- АНИМАЦИИ ПИТОМЦА --- */
+.avatar-container {
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pet-avatar {
+    font-size: 55px;
+    transition: all 0.2s ease;
+}
+
+/* Стандартное покачивание (Дыхание) */
+.state-idle {
+    animation: idleAnimation 1.2s infinite alternate ease-in-out;
+}
+@keyframes idleAnimation {
+    0% { transform: translateY(0) scaleX(1); }
+    100% { transform: translateY(-6px) scaleX(1.05); }
+}
+
+/* Анимация еды (Сжатие и расширение) */
+.state-eating {
+    animation: eatingAnimation 0.3s repeat 3;
+}
+@keyframes eatingAnimation {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3) translateY(5px); }
+}
+
+/* Анимация прогулки (Прыжки влево-вправо) */
+.state-walking {
+    animation: walkingAnimation 0.4s repeat 2 ease-in-out;
+}
+@keyframes walkingAnimation {
+    0%, 100% { transform: translateX(-15px) translateY(0); }
+    50% { transform: translateX(15px) translateY(-15px); }
+}
+
+/* Анимация ласки (Вращение) */
+.state-happy {
+    animation: happyAnimation 0.5s ease-in-out;
+}
+@keyframes happyAnimation {
+    0%, 100% { transform: scale(1.1); }
+    50% { transform: rotate(15deg) scale(1.2); }
+}
+
+/* Сон / Игнор (Покачивание из стороны в сторону) */
+.state-sleeping {
+    animation: sleepingAnimation 1.5s infinite alternate ease-in-out;
+}
+@keyframes sleepingAnimation {
+    0% { transform: rotate(-10deg) scale(0.9); }
+    100% { transform: rotate(10deg) scale(0.9); }
+}
+
+/* --- ВСПЛЫВАЮЩИЕ ЦИФРЫ ЭФФЕКТОВ --- */
+.floating-text {
+    position: absolute;
+    font-weight: bold;
+    font-size: 16px;
+    animation: floatUp 0.8s forwards ease-out;
+    pointer-events: none;
+}
+@keyframes floatUp {
+    0% { opacity: 1; transform: translateY(100px) scale(1); }
+    100% { opacity: 0; transform: translateY(40px) scale(1.3); }
+}
+
+/* Сетка нижних кнопок управления */
+.controls {
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+.controls button {
+    padding: 8px 4px;
+    font-size: 11px;
+    border-radius: 12px;
+    background-color: #f39c12;
+    color: #fff;
+    border: 2px solid #d35400;
+    box-shadow: 0 4px #d35400;
+}
+.controls button:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px #d35400;
+}
+.controls button:nth-child(4) { grid-column: span 1; }
+.controls button:nth-child(5) { grid-column: span 2; background-color: #95a5a6; border-color: #7f8c8d; box-shadow: 0 4px #7f8c8d;}
+.controls button:nth-child(5):active { box-shadow: 0 1px #7f8c8d; }
