@@ -1,0 +1,147 @@
+openapi: 3.0.3
+info:
+  title: Tegugotchi API
+  description: RESTful API виртуального питомца (кейс 8 — «Виртуальный питомец»).
+  version: 1.0.0
+servers:
+  - url: http://localhost:8008
+paths:
+  /pets:
+    post:
+      summary: Создать питомца
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, hp]
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  example: Жма
+                hp:
+                  type: integer
+                  minimum: 1
+                  example: 10
+      responses:
+        '201':
+          description: Питомец создан. Счастье и голод изначально 2.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetStats'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /pets/{pet_id}:
+    get:
+      summary: Получить статистику питомца
+      parameters:
+        - $ref: '#/components/parameters/PetId'
+      responses:
+        '200':
+          description: Текущая статистика питомца.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetStats'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /pets/{pet_id}/{action}:
+    post:
+      summary: Выполнить действие с питомцем
+      description: >
+        Тела у запроса нет. Если после действия голод больше 5, питомец теряет hp
+        (штрафы за подряд идущие действия растут: 1, 2, 3, ...). Если hp или счастье
+        достигли 0, питомец исчезает и удаляется.
+      parameters:
+        - $ref: '#/components/parameters/PetId'
+        - name: action
+          in: path
+          required: true
+          description: >
+            Действие: feed (голод −2), pat (счастье +1, голод +1),
+            treat (счастье +2, голод −1), walk (счастье +1, голод +3),
+            ignore (счастье −1, голод +1).
+          schema:
+            type: string
+            enum: [feed, pat, treat, walk, ignore]
+          example: pat
+      responses:
+        '200':
+          description: >
+            Действие выполнено. Возвращается обновлённая статистика питомца
+            или сообщение о том, что питомец исчез.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/PetStats'
+                  - $ref: '#/components/schemas/PetGone'
+              examples:
+                stats:
+                  summary: Питомец жив
+                  value: { "id": 1, "name": "Жма", "hp": 10, "happiness": 3, "hunger": 3 }
+                gone:
+                  summary: Питомец исчез
+                  value: { "id": 1, "gone": true, "message": "Жма исчез" }
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+components:
+  parameters:
+    PetId:
+      name: pet_id
+      in: path
+      required: true
+      description: Номер питомца, выданный сервером при создании.
+      schema:
+        type: integer
+      example: 1
+  schemas:
+    PetStats:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        name: { type: string, example: Жма }
+        hp: { type: integer, example: 10 }
+        happiness: { type: integer, example: 2 }
+        hunger: { type: integer, example: 2 }
+    PetGone:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        gone: { type: boolean, example: true }
+        message: { type: string, example: Жма исчез }
+    Error:
+      type: object
+      properties:
+        error: { type: string }
+  responses:
+    BadRequest:
+      description: >
+        Неверные данные в запросе: тело не JSON-объект, name не строка или пустая,
+        hp не целое число или не больше 0.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example: { "error": "name must be a non-empty string" }
+    NotFound:
+      description: >
+        Питомца с таким номером нет (или он уже исчез), либо неизвестное действие,
+        либо неизвестный адрес.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example: { "error": "pet not found" }
+    MethodNotAllowed:
+      description: Для этого адреса допустим только метод POST.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example: { "error": "method not allowed" }
