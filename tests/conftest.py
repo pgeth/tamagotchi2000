@@ -11,7 +11,7 @@ import pytest
 import requests
 from werkzeug.serving import make_server
 
-from tegugotchi.backend.database.repository import PetRepository
+from tegugotchi.backend.database.pet_repository import PetRepository
 from tegugotchi.backend.server.app import create_app
 
 
