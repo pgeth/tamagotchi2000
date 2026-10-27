@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
  
-from tegugotchi.backend.database.repository import PetRepository
+from tegugotchi.backend.database.pet_repository import PetRepository
 from tegugotchi.backend.pet import Pet
  
 ACTIONS = ("feed", "pat", "treat", "walk", "ignore")
@@ -42,7 +42,7 @@ def create_app(repository: PetRepository) -> Flask:
         except ValueError as exc:
             return error(str(exc), 400)
  
-        pet_id = repository.create(pet)
+        pet_id = repository.add(pet)
         return jsonify(pet_to_dict(pet_id, pet)), 201
  
     @app.get("/pets/<int:pet_id>")

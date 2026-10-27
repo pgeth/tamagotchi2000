@@ -16,7 +16,7 @@ class PetRepository:
         self._pets = database["pets"]
         self._counters = database["counters"]
 
-    def _next_id(self) -> int:
+    def next_id(self) -> int:
         """Следующий свободный номер питомца (1, 2, 3, ...)."""
         counter = self._counters.find_one_and_update(
             {"_id": "pets"},
@@ -36,9 +36,9 @@ class PetRepository:
             "hunger_penalty_count": pet.hunger_penalty_count,
         }
 
-    def create(self, pet: Pet) -> int:
+    def add(self, pet: Pet) -> int:
         """Сохранить нового питомца и вернуть его номер."""
-        pet_id = self._next_id()
+        pet_id = self.next_id()
         self._pets.insert_one({"_id": pet_id, **self._to_document(pet)})
         return pet_id
 
@@ -56,7 +56,10 @@ class PetRepository:
         )
 
     def save(self, pet_id: int, pet: Pet) -> None:
-        """Записать новое состояние живого питомца."""
+        """Записать состояние питомца. Исчезнувшего удаляет из базы."""
+        if not pet.is_alive:
+            self.delete(pet_id)
+            return
         self._pets.update_one(
             {"_id": pet_id}, {"$set": self._to_document(pet)}
         )
