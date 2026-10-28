@@ -12,4 +12,4 @@ jobs:
         - name: Run Ruff
           run: |
             pip install ruff
-            ruff check tests tegugotchi
+            ruff check main.py conf tests tegugotchi
