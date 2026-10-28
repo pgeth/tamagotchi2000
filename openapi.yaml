@@ -34,6 +34,8 @@ paths:
                 $ref: '#/components/schemas/PetStats'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
   /pets/{pet_id}:
     get:
       summary: Получить статистику питомца
@@ -48,6 +50,8 @@ paths:
                 $ref: '#/components/schemas/PetStats'
         '404':
           $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
   /pets/{pet_id}/{action}:
     post:
       summary: Выполнить действие с питомцем
@@ -103,6 +107,7 @@ components:
   schemas:
     PetStats:
       type: object
+      required: [id, name, hp, happiness, hunger]
       properties:
         id: { type: integer, example: 1 }
         name: { type: string, example: Жма }
@@ -111,12 +116,14 @@ components:
         hunger: { type: integer, example: 2 }
     PetGone:
       type: object
+      required: [id, gone, message]
       properties:
         id: { type: integer, example: 1 }
-        gone: { type: boolean, example: true }
+        gone: { type: boolean, enum: [true], example: true }
         message: { type: string, example: Жма исчез }
     Error:
       type: object
+      required: [error]
       properties:
         error: { type: string }
   responses:
@@ -139,7 +146,9 @@ components:
             $ref: '#/components/schemas/Error'
           example: { "error": "pet not found" }
     MethodNotAllowed:
-      description: Для этого адреса допустим только метод POST.
+      description: >
+        HTTP-метод не поддерживается маршрутом. Создание и действия требуют POST,
+        статистика — GET. Flask автоматически поддерживает OPTIONS и HEAD для GET.
       content:
         application/json:
           schema:
