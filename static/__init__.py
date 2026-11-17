@@ -1,0 +1,1 @@
+# tamagotci2000.static

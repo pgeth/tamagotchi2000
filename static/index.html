@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tegugotchi 2000</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="tamagotchi-case">
+        <!-- Окно создания питомца (на всю ширину) -->
+        <div id="creation-window" class="window full-window">
+            <h2>Инициализация робота</h2>
+            <input type="text" id="pet-name" placeholder="Имя робота" maxlength="12">
+            <input type="number" id="pet-hp" placeholder="Начальный заряд (HP)" min="1" max="100" value="10">
+            <button id="btn-create">Запустить систему</button>
+        </div>
+
+        <!-- Основной горизонтальный интерфейс игры -->
+        <div id="game-window" class="game-layout hidden">
+            <!-- Левая часть: большой дисплей с роботом -->
+            <div class="left-panel">
+                <div class="screen-border">
+                    <div class="screen">
+                        <div class="pet-avatar">
+                            <img id="pet-img" src="character/idle.gif" alt="Робот-питомец">
+                        </div>
+                        <p id="game-message">Система готова к работе!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правая часть: метрики и кнопки -->
+            <div class="right-panel">
+                <h2 id="display-name">Имя</h2>
+
+                <div class="stats">
+                    <div class="stat-item">
+                        <span>❤️ Прочность (HP):</span>
+                        <strong id="stat-hp">10</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>😊 Счастье:</span>
+                        <strong id="stat-happiness">10</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>🔋 "Энергия":</span>
+                        <strong id="stat-hunger">10</strong>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="action-btn" data-action="feed">🔋 Зарядить</button>
+                    <button class="action-btn" data-action="pat">👋 Погладить</button>
+                    <button class="action-btn" data-action="treat">⚡ Апгрейд</button>
+                    <button class="action-btn" data-action="walk">🛰️ Прогулка</button>
+                    <button class="action-btn full-btn" data-action="ignore">💤 Спящий режим</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Экран поломки (на всю ширину) -->
+        <div id="death-window" class="window full-window hidden">
+            <h2>Робот разрядился... 🪫</h2>
+            <div class="pet-avatar">
+                <img src="character/break.gif" alt="Сломанный робот">
+            </div>
+            <p id="death-reason"></p>
+            <button id="btn-restart">Перезапустить</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
