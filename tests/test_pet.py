@@ -98,7 +98,7 @@ def test_hunger_not_changed_after_disappearing_from_happiness():
     pet.ignore()  # счастье 0, питомец исчез, голод не меняется
     assert not pet.is_alive
     with pytest.raises(ValueError):
-        pet.hunger
+        _ = pet.hunger
  
  
 def test_disappeared_manually(pet):

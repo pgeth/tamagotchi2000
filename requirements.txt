@@ -1,4 +1,7 @@
 flask
 requests
+pymongo
+mongomock
 pytest
 pytest-cov
+flake8
